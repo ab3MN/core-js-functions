@@ -142,7 +142,19 @@ const memoize = (func) => {
  * }, 2);
  * retryer() => 2
  */
-function retry(/* func, attempt */) {}
+const retry = (func, attempts) => {
+  let error;
+  return () => {
+    for (let i = 0; i < attempts; i += 1) {
+      try {
+        return func();
+      } catch (e) {
+        error = e;
+      }
+    }
+    return error;
+  };
+};
 
 /**
  * Returns the logging wrapper for the specified method,
