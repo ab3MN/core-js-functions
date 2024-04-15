@@ -179,18 +179,19 @@ const retry = (func, attempts) => {
  * cos(3.141592653589793) ends
  *
  */
-function getFunctionParams(func, args) {
-  return `${func.name}(${args.join(',')})`;
+function logFunctionParams(func, args, type) {
+  const params = args.map((arg) => JSON.stringify(arg)).join(',');
+  return `${func.name}(${params}) ${type}`;
 }
 
 function logger(func, logFunc) {
   return (...args) => {
-    const start = `${getFunctionParams(func, args)} starts`;
+    const start = `${logFunctionParams(func, args, 'starts')}`;
     logFunc(start);
-    const end = `${getFunctionParams(func, args)} ends`;
-    logFunc(end);
+    const end = `${logFunctionParams(func, args, 'ends')}`;
 
-    const res = func.call(this, ...args);
+    const res = func(...args);
+    logFunc(end);
 
     return res;
   };
